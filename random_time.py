@@ -56,12 +56,16 @@ def format_timestamp_to_str(timestamp):
 def do_gene_random_time(start_time_min, start_time_max, last_time_min, last_time_max):
     """
 
-    :param start_time_min:
-    :param start_time_max:
-    :param last_time_min:
-    :param last_time_max:
+    :param start_time_min: 最早的答题开始时间
+    :param start_time_max: 最晚的答题开始时间
+    :param last_time_min: 最少的答题时长
+    :param last_time_max: 最多的答题时长
     :return:
     """
+    start_time_min = format_str_timestamp(start_time_min)
+    start_time_max = format_str_timestamp(start_time_max)
+    last_time_min = convert_str_seconds(last_time_min)
+    last_time_max = convert_str_seconds(last_time_max)
 
     _start_ts = random.randint(start_time_min, start_time_max)
     _answer_seconds = random.randint(last_time_min, last_time_max)
