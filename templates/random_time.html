@@ -46,6 +46,14 @@
         </td>
     </tr>
 </table>
+<h2>随机生成的结果：</h2>
+<table class="result">
+    <tr>
+        <th>开始时间</th>
+        <th>答题时长</th>
+        <th>结束时间</th>
+    </tr>
+</table>
 </body>
 <script>
     $(function () {
@@ -60,8 +68,20 @@
             };
             ajaxPost("/random/time", data, function (ret) {
                 console.log(ret)
+                append_tr(ret)
             })
         })
-    })
+    });
+
+    function append_tr(data_list) {
+        $(".data_tr").remove()
+        var tr = '';
+        for (var i = 0; i < data_list.length; i++) {
+            tr += '<tr class="data_tr"><td>' + data_list[i][0] + '</td><td>' + data_list[i][1] + '</td><td>' + data_list[i][2] + '</td></tr>'
+        }
+
+        $(".result").append(tr)
+
+    }
 </script>
 </html>
