@@ -67,9 +67,15 @@ def do_gene_random_time(start_time_min, start_time_max, last_time_min, last_time
     last_time_min = convert_str_seconds(last_time_min)
     last_time_max = convert_str_seconds(last_time_max)
 
-    _start_ts = random.randint(start_time_min, start_time_max)
-    _answer_seconds = random.randint(last_time_min, last_time_max)
-    _end_ts = _start_ts + _answer_seconds
+    while True:
+        temp = random.randint(start_time_min, start_time_max)
+        if time.localtime(temp)[3] in range(8,21):
+            _start_ts = temp
+            _answer_seconds = random.randint(last_time_min, last_time_max)
+            _end_ts = _start_ts + _answer_seconds
+            break
+        else:
+            continue
 
     return format_timestamp_to_str(_start_ts), convert_seconds_str(_answer_seconds), format_timestamp_to_str(_end_ts)
 
