@@ -31,17 +31,65 @@ def page_random_time():
         max_last_time = request.form["max_last_time"]
         gene_count = request.form["gene_count"]
 
-        try:
-            time_list = list()
-            for i in range(int(gene_count)):
-                time_list.append(do_gene_random_time(min_bg_time, max_bg_time, min_last_time, max_last_time))
+        advenable_bg_time = request.form["advenable_bg_time"]   #开始时间高级设置bool
+        advenable_last_time = request.form["advenable_last_time"]  #时长高级设置bool
 
+        if advenable_bg_time:
+            #if bg
+            advenable_bg_time_settings = request.form["advenable_bg_time_settings"]  #开始时间字典集
+            time_list = list()
+            for bgsettings in advenable_bg_time_settings:  #开始时间字典
+                adv_min_bg_time = bgsettings['min']
+                adv_max_bg_time = bgsettings['max']
+                adv_rate_bg_time = bgsettings['rate']
+                if advenable_last_time:
+                    #if bg and last
+                    advenable_last_time_settings = request.form["advenable_last_time_settings"]  # 时长字典集
+                    for lsettings in advenable_last_time_settings:  # 时长字典
+                        adv_min_last_time = lsettings['min']
+                        adv_max_last_time = lsettings['max']
+                        adv_rate_last_time = lsettings['rate']
+                        for i in range(int(gene_count) * float(adv_rate_bg_time)):
+                            for j in range(int(gene_count) * float(adv_rate_last_time)):
+                                time_list.append(
+                                    do_gene_random_time(adv_min_bg_time, adv_max_bg_time, adv_min_last_time, adv_max_last_time))
+                else:
+                    #if bg but last
+                    for i in range(int(gene_count) * float(adv_rate_bg_time)):
+                        time_list.append(
+                            do_gene_random_time(adv_min_bg_time, adv_max_bg_time, min_last_time, max_last_time))
             res['time_list'] = time_list
-            res['status'] = 0
-            return json.dumps(res)
-        except ValueError as e:
-            res['status'] = -1
-            return json.dumps(res)
+
+        elif advenable_last_time:
+            # if last but bg
+            advenable_last_time_settings = request.form["advenable_last_time_settings"]  # 时长字典集
+            time_list = list()
+            for lsettings in advenable_last_time_settings:  # 时长字典
+                adv_min_last_time = lsettings['min']
+                adv_max_last_time = lsettings['max']
+                adv_rate_last_time = lsettings['rate']
+                for i in range(int(gene_count) * float(adv_rate_last_time)):
+                    time_list.append(
+                        do_gene_random_time(min_bg_time, max_bg_time, adv_min_last_time, adv_max_last_time))
+            res['time_list'] = time_list
+
+        else:
+            #not bg or last
+            try:
+                time_list = list()
+                for i in range(int(gene_count)):
+                    time_list.append(do_gene_random_time(min_bg_time, max_bg_time, min_last_time, max_last_time))
+
+                res['time_list'] = time_list
+                res['status'] = 0
+
+            except ValueError as e:
+                res['status'] = -1
+
+        return json.dumps(res)
+
+
+
 
 
 if __name__ == '__main__':
