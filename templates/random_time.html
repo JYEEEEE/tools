@@ -2,63 +2,290 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>在给定范围内随机时间</title>
+    <title>随机时间生成器</title>
+    <style>
+        #body_div{                                                          /*防止父div高度塌陷*/
+            zoom:1;
+            overflow:hidden;
+            margin:0;
+        }
+        td,th{                                                              /*所有文字*/
+            color:#330000;
+        }
+        h1{                                                                 /*一级标题*/
+            margin:0;
+            vertical-align:middle;
+            line-height:50px;
+            text-align:center;
+        }
+        h2{                                                                 /*二级标题*/
+            font-size:20px;
+            margin:0;
+            line-height:40px;
+            vertical-align:middle;
+        }
+        .head,.subhead{                                                     /*一级、二级标题*/
+            text-align:left;
+        }
+        #input_table{                                                       /*表1*/
+            width: 50%;
+            float: left;
+            border-right: 2px solid #bebebe69;
+            height:500px;
+            padding:0 25px;
+            text-align:center;
+        }
+        #t1h1{                                                              /*表1大标题*/
+            background-color:#acd322;
+        }
+        #instruction{                                                       /*版本说明*/
+            font-size:10px;
+            float:right;
+            display:inline-block;
+            color:#2f2c2c73;
+        }
+        #instruction:hover{                                                       /*版本说明-鼠标悬停*/
+            color:#330000;
+        }
+        td .adv{                                                            /*高级设置*/
+            margin-left:132px;
+            color:#a4c828;
+            font-size:12px;
+        }
+        td .adv:hover{                                                      /*高级设置-鼠标悬停*/
+            color:#ee7171;
+        }
+        .adv_bg_time_rate,.adv_last_time_rate{
+            width:123px;
+        }
+        td .add{                                                            /*添加*/
+            margin-left:138px;
+            color:#a4c828;
+            font-size:14px;
+            text-decoration:none;
+        }
+        td .add:hover{                                                      /*添加-鼠标悬停*/
+            color:#ee7171;
+        }
+        .gene_count{                                                        /*生成条数框*/
+            width:123px;
+        }
+        #adv_last_totalrate,#adv_bg_totalrate{                              /*分布总计*/
+            font-size:12px;
+        }
+        #generate{                                                          /*生成键*/
+            display:inline-block;
+            border:2px solid #acd322;
+            margin-left:77px;
+            display:inline-block;
+            text-align:center;
+            width:100px;
+            height:40px;
+            vertical-align:middle;
+            text-decoration:none;
+            line-height:40px;
+            background:#fff;
+            color:#acd322;
+        }
+        #generate:hover{                                                    /*生成键-鼠标悬停*/
+            background:#ee7171;
+            color:#fff;
+            border-color:#ee7171;
+        }
+        #output_table{                                                      /*表2*/
+            float:left;
+            width:50%;
+            padding:0 25px;
+        }
+        #t2h1{                                                              /*表2大标题*/
+            background-color:rgb(238,113,113);
+        }
+        #foot{                                                              /*页脚*/
+
+            vertical-align:middle;
+            text-align:center;
+            margin-top:40px;
+        }
+        #advice{                                                            /*提点建议*/
+            text-decoration:none;
+            font-size:12px;
+            color:#2f2c2c73;
+        }
+        #advice:hover{                                                      /*提点建议-鼠标悬停*/
+            color:#330000;
+        }
+
+
+    </style>
 </head>
 <script src="../static/js/jquery-1.10.2.js"></script>
 <script src="../static/js/jquery.cookie.js"></script>
 <script src="../static/js/base_utils.js"></script>
 <body>
-<h2>请输入时间配置：</h2>
-<table>
-    <tr>
-        <th>最早开始时间</th>
-        <td>
-            <input type="text" class="min_begin_time" value="2019/06/05 10:00:00">
-        </td>
-    </tr>
-    <tr>
-        <th>最晚开始时间</th>
-        <td>
-            <input type="text" class="max_begin_time" value="2019/06/05 12:00:00">
-        </td>
-    </tr>
-    <tr>
-        <th>答题最短时间</th>
-        <td>
-            <input type="text" class="min_last_time" value="00:10:00">
-        </td>
-    </tr>
-    <tr>
-        <th>答题最长时间</th>
-        <td>
-            <input type="text" class="max_last_time" value="01:00:00">
-        </td>
-    </tr>
-    <tr>
-        <th>生成个数</th>
-        <td>
-            <input type="text" class="gene_count" value="5">
-        </td>
-    </tr>
-    <tr>
-        <th></th>
-        <td><span class="error_msg"></span></td>
-    </tr>
-    <tr>
-        <th></th>
-        <td>
-            <button type="button" class="submit">开始生成</button>
-        </td>
-    </tr>
-</table>
-<h2>随机生成的结果：</h2>
-<table class="result">
-    <tr>
-        <th>开始时间</th>
-        <th>答题时长</th>
-        <th>结束时间</th>
-    </tr>
-</table>
+<div id="body_div">
+    <table id="input_table">
+        <tr>
+            <td class="head" id="t1h1" colspan="2"><h1>请输入时间配置</h1></td>
+
+        </tr>
+        <tr>
+            <td class="subhead" colspan="2" style="disply:inline-block">
+                <h2 style="float:left">开始答题时间</h2>
+                <a id="instruction" href="#"><i>版本说明</i></a>
+            </td>
+
+        </tr>
+
+        <tr>
+            <td style="">
+                <span>最早</span>
+                <input type="text" class="min_begin_time" value="2019/06/05 10:00:00">
+            </td>
+
+            <td style="">
+                <span>最晚</span>
+                <input type="text" class="max_begin_time" value="2019/06/05 12:00:00">
+            </td>
+        </tr>
+
+
+        <tr>
+            <td></td>
+            <td><a href="#" class="adv">高级设置</a></td>
+        </tr>
+
+
+        <tr class="adv_bg">
+            <td>
+                <span>最早</span>
+                <input type="text" class="adv_min_bg_time" value="2019/06/05 10:00:00">
+            </td>
+            <td>
+                <span>最晚</span>
+                <input type="text" class="adv_min_bg_time" value="2019/06/05 10:00:00">
+            </td>
+        </tr>
+        <tr class="adv_bg">
+            <td>
+                <span>分布</span>
+                <input type="text" class="adv_bg_time_rate" >
+                <span>%</span>
+            </td>
+        </tr>
+
+
+        <tr class="adv_bg" id="adv_bg_add">
+            <td></td>
+            <td><a href="#" class="add"><b>+</b> 添加</a></td>
+        </tr>
+        <tr class="adv_bg" id="adv_bg_totalrate">
+            <td colspan="2">
+                <div style="width:250px; margin:0 auto;">
+                    <span>分布总计</span>
+                    <input type="text" class="adv_bg_time_totalrate" style="width:45px">
+                    <span>%</span>
+                </div>
+            </td>
+        </tr>
+
+
+
+        <tr>
+            <th class="subhead" colspan="2"><h2>答题时长</h2></th>
+        </tr>
+        <tr>
+            <td>
+                <span>最少</span>
+                <input type="text" class="min_last_time" value="00:10:00">
+            </td>
+
+            <td>
+                <span>最多</span>
+                <input type="text" class="max_last_time" value="01:00:00">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><a href="#" class="adv">高级设置</a></td>
+        </tr>
+
+
+        <tr class="adv_last">
+            <td>
+                <span>最少</span>
+                <input type="text" class="adv_min_last_time" value="00:10:00">
+            </td>
+            <td>
+                <span>最多</span>
+                <input type="text" class="adv_min_last_time" value="01:00:00">
+            </td>
+        </tr>
+        <tr class="adv_last">
+            <td>
+                <span>分布</span>
+                <input type="text" class="adv_bg_time_rate" >
+                <span>%</span>
+            </td>
+
+
+        </tr>
+        <tr class="adv_last" id="adv_last_add">
+            <td></td>
+            <td><a href="#" class="add"><b>+</b> 添加</a></td>
+        </tr>
+        <tr class="adv_last" id="adv_last_totalrate">
+            <td colspan="2" >
+                <div style="width:250px; margin:0 auto;">
+                    <span>分布总计</span>
+                    <input type="text" class="adv_last_time_totalrate" style="width:45px">
+                    <span>%</span>
+                </div>
+            </td>
+        </tr>
+
+
+
+        <tr>
+            <th class="subhead" colspan="2"><h2>生成条数</h2></th>
+        </tr>
+        <tr>
+            <td>
+                <span>生成</span>
+                <input type="text" class="gene_count" value="5">
+                <span>条</span>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><strong><a href="#" id="generate">生成</a></strong></td>
+
+        </tr>
+    </table>
+
+
+    <table id="output_table">
+        <tr>
+            <th class="head" id="t2h1" colspan="3">
+                <h1><a>生成结果</a></h1>
+            </th>
+        </tr>
+        <tr>
+            <td style="width:33%" align="center"><h2>start</h2></td>
+            <td style="width:33%" align="center"><h2>答题时长</h2></td>
+            <td style="width:33%" align="center"><h2>finish</h2></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+    </table>
+</div>
+<div id="foot">
+    <a href="#" id="advice">- 提 点 建 议 -</a>
+</div>
 </body>
 <script>
     $(function () {
