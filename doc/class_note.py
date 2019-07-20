@@ -3,6 +3,7 @@ class People(object):
     类： 属性和方法的集合
     类名通常要求首字母大写
     """
+
     def __new__(cls, *args, **kwargs):
         """
         相当于构造函数，类被实例化的初始步骤
@@ -62,7 +63,6 @@ if __name__ == '__main__':
     print('----------------------------')
 
     jyeeee.print_me('tips： 已经实例化对象也能够调用类方法。但是不建议。')
-
 
 # 总结
 # People：是实例
