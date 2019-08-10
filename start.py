@@ -9,6 +9,7 @@ import json
 
 from flask import Flask, render_template, request
 from random_time import do_gene_random_time
+from random_ip import gen_ip_list
 
 app = Flask(__name__)
 
@@ -89,8 +90,16 @@ def page_random_time():
         return json.dumps(res)
 
 
+@app.route('/random/ip', methods=['GET', 'POST'])
+def page_random_ip():
+    if request.method == 'GET':
+        return render_template('random_ip.html')
 
-
+    if request.method == 'POST':
+        res = {'status': 1}
+        ip_settings = request.form["ip_settings"] #[{"min':192.1.1.1, 'max':193.1.1.1, 'count':5},{},{}]
+        res['ran_ip_list'] = gen_ip_list(ip_settings)
+    return json.dumps(res)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
