@@ -6,6 +6,93 @@
 </head>
 <body>
 
+<div style="float:left">
+    <h3>请输入ip地址段：</h3>
+    <table id="ip_table">
+        <tr>
+            <th>起始</th>
+            <th>终止</th>
+            <th>个数</th>
+            <th>
+                <div id="add_item" style="background-color:red">新增</div>
+            </th>
+        </tr>
+        <tr>
+            <td><input class="min_ip" value="0.0.0.0"/></td>
+            <td><input class="max_ip" value="0.0.0.0"/></td>
+            <td><input class="count" value="1"/></td>
+            <td>
+                <p class="delete">删除</p>
+            </td>
 
+        </tr>
+    </table>
+    <button id="submit">生成</button>
+</div>
+<div style="float:left;margin-left: 150px">
+    <h3>生成结果：</h3>
+    <div id="result" ></div>
+</div>
 </body>
+<script src="../static/js/jquery-1.10.2.js"></script>
+<script src="../static/js/jquery.cookie.js"></script>
+<script src="../static/js/base_utils.js"></script>
+<script>
+    $(function () {
+        $("#add_item").on('click', function () {
+            $("#ip_table").append("        <tr>\n" +
+                "            <td><input class=\"min_ip\" value=\"0.0.0.0\"/></td>\n" +
+                "            <td><input class=\"max_ip\" value=\"0.0.0.0\"/></td>\n" +
+                "            <td><input class=\"count\" value=\"1\"/></td>\n" +
+                "            <td>\n" +
+                "                <p class=\"delete\">删除</p>\n" +
+                "            </td>\n" +
+                "\n" +
+                "        </tr>")
+            $(".delete").on('click', function () {
+                $(this).parent().parent().remove();
+            });
+
+        });
+
+        $(".delete").on('click', function () {
+            $(this).parent().parent().remove();
+        });
+
+        $("#submit").on('click', function () {
+            var min_list = []
+            $(".min_ip").each(function () {
+                min_list.push($(this).val())
+            })
+
+            var max_list = []
+            $(".max_ip").each(function () {
+                max_list.push($(this).val())
+            })
+
+            var count_list = []
+            $(".count").each(function () {
+                count_list.push($(this).val())
+            })
+
+            var ip_settings = []
+            for (var i = 0; i < min_list.length; i++) {
+                ip_settings.push({'min': min_list[i], 'max': max_list[i], 'count': parseInt(count_list[i])})
+            }
+
+            ajaxPost('/random/ip', {'ip_settings': JSON.stringify(ip_settings)}, function (res) {
+                console.log(res)
+                if (res.status !== 0) {
+                    alert('请检查填写内容！')
+                } else {
+                    $("#result").empty();
+                    for (var i=0;i<res.ran_ip_list.length;i++) {
+                        $("#result").append('<p>' + res.ran_ip_list[i] + '</p>')
+                    }
+                }
+            })
+        })
+    })
+
+</script>
 </html>

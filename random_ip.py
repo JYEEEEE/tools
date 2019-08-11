@@ -41,18 +41,18 @@ def gen_ip_list(ip_settings: list):
     :return:
     """
 
+    ran_ip_list = []
     for st in ip_settings:
         min = st.get('min')
         max = st.get('max')
         count = st.get('count')
-        ran_ip_list = []
         for i in range(count):
             num_min = ip_to_int(min)
             num_max = ip_to_int(max)
             ran_int = randint(num_min, num_max)
             ip = int_to_ip(ran_int)
             ran_ip_list.append(ip)
-        return ran_ip_list
+    return ran_ip_list
 
 
 if __name__ == "__main__":
