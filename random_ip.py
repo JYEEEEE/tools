@@ -6,28 +6,35 @@
 @email: jj.wu@idiaoyan.com
 @time: 2019/8/10 0:03
 """
-from flask import Flask, render_template, request
-import os, socket, struct,random
-
-ip_to_int = lambda x: sum([256 ** j * int(i) for j, i in enumerate(x.split('.')[::-1])])
-int_to_ip = lambda x: '.'.join([str(x/(256**i)%256) for i in range(3,-1,-1)])
 
 
+def ip_to_int(ip: str):
+    ip_list = ip.split('.')  # ['192',]
+    bin_ip = []
+    for i in ip_list:
+        ip = bin(int(i))[2:]
+        ip = ip.zfill(8)
+        bin_ip.append(ip)
+
+    _b = '0b' + ''.join(bin_ip)
+    return int(_b, 2)
 
 
-def gen_ip_list(ip_settings):
+def int_to_ip(num):
+    bin_ip = bin(num)[2:].zfill(32)
+
     ip_list = []
-    ran_ip_list = []
-    for settings in ip_settings:
-        min_ip = settings['min']
-        max_ip = settings['max']
-        count_ip = settings['count']
-        for i in range(1,int(count_ip)+1):
-            int_ip = random.randint(ip_to_int(min_ip), ip_to_int(max_ip) + 1)
-            ip_list.append(int_ip)
-    for j in ip_list:
-        ran_ip_list.append(int_to_ip(j))
-    return ran_ip_list
+    for i in range(0, 32, 8):
+        # 0-8, 9-16, 17, 24, 25
+        ip = '0b' + bin_ip[i: i + 8]
+        ip = int(ip, 2)
+        ip_list.append(str(ip))
+
+    return '.'.join(ip_list)
 
 
+if __name__ == "__main__":
+    num = ip_to_int('255.255.255.1')
+    ip = int_to_ip(num)
 
+    print(ip, num)
