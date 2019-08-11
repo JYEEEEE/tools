@@ -32,19 +32,19 @@ def page_random_time():
         max_last_time = request.form["max_last_time"]
         gene_count = request.form["gene_count"]
 
-        advenable_bg_time = request.form["advenable_bg_time"]   #开始时间高级设置bool
-        advenable_last_time = request.form["advenable_last_time"]  #时长高级设置bool
+        advenable_bg_time = request.form["advenable_bg_time"]  # 开始时间高级设置bool
+        advenable_last_time = request.form["advenable_last_time"]  # 时长高级设置bool
 
         if advenable_bg_time:
-            #if bg
-            advenable_bg_time_settings = request.form["advenable_bg_time_settings"]  #开始时间字典集
+            # if bg
+            advenable_bg_time_settings = request.form["advenable_bg_time_settings"]  # 开始时间字典集
             time_list = list()
-            for bgsettings in advenable_bg_time_settings:  #开始时间字典
+            for bgsettings in advenable_bg_time_settings:  # 开始时间字典
                 adv_min_bg_time = bgsettings['min']
                 adv_max_bg_time = bgsettings['max']
                 adv_rate_bg_time = bgsettings['rate']
                 if advenable_last_time:
-                    #if bg and last
+                    # if bg and last
                     advenable_last_time_settings = request.form["advenable_last_time_settings"]  # 时长字典集
                     for lsettings in advenable_last_time_settings:  # 时长字典
                         adv_min_last_time = lsettings['min']
@@ -53,9 +53,10 @@ def page_random_time():
                         for i in range(int(gene_count) * float(adv_rate_bg_time)):
                             for j in range(int(gene_count) * float(adv_rate_last_time)):
                                 time_list.append(
-                                    do_gene_random_time(adv_min_bg_time, adv_max_bg_time, adv_min_last_time, adv_max_last_time))
+                                    do_gene_random_time(adv_min_bg_time, adv_max_bg_time, adv_min_last_time,
+                                                        adv_max_last_time))
                 else:
-                    #if bg but last
+                    # if bg but last
                     for i in range(int(gene_count) * float(adv_rate_bg_time)):
                         time_list.append(
                             do_gene_random_time(adv_min_bg_time, adv_max_bg_time, min_last_time, max_last_time))
@@ -75,7 +76,7 @@ def page_random_time():
             res['time_list'] = time_list
 
         else:
-            #not bg or last
+            # not bg or last
             try:
                 time_list = list()
                 for i in range(int(gene_count)):
@@ -97,9 +98,10 @@ def page_random_ip():
 
     if request.method == 'POST':
         res = {'status': 1}
-        ip_settings = request.form["ip_settings"] #[{"min':192.1.1.1, 'max':193.1.1.1, 'count':5},{},{}]
+        ip_settings = request.form["ip_settings"]
+        ip_settings = json.loads(ip_settings)  # [{"min':192.1.1.1, 'max':193.1.1.1, 'count':5},{},{}]
         res['ran_ip_list'] = gen_ip_list(ip_settings)
-    return json.dumps(res)
+        return json.dumps(res)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")

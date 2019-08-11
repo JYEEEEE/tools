@@ -6,6 +6,7 @@
 @email: jj.wu@idiaoyan.com
 @time: 2019/8/10 0:03
 """
+from random import randint
 
 
 def ip_to_int(ip: str):
@@ -31,6 +32,27 @@ def int_to_ip(num):
         ip_list.append(str(ip))
 
     return '.'.join(ip_list)
+
+
+def gen_ip_list(ip_settings: list):
+    """
+
+    :param ip_settings:
+    :return:
+    """
+
+    for st in ip_settings:
+        min = st.get('min')
+        max = st.get('max')
+        count = st.get('count')
+        ran_ip_list = []
+        for i in range(count):
+            num_min = ip_to_int(min)
+            num_max = ip_to_int(max)
+            ran_int = randint(num_min, num_max)
+            ip = int_to_ip(ran_int)
+            ran_ip_list.append(ip)
+        return ran_ip_list
 
 
 if __name__ == "__main__":
