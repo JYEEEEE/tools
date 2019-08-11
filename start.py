@@ -101,7 +101,6 @@ def page_random_ip():
         try:
             ip_settings = request.form["ip_settings"]
             ip_settings = json.loads(ip_settings)  # [{"min':192.1.1.1, 'max':193.1.1.1, 'count':5},{},{}]
-            print(ip_settings)
             res['ran_ip_list'] = gen_ip_list(ip_settings)
             res['status'] = 0
             return json.dumps(res)
