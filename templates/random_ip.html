@@ -3,6 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>随机ip生成器</title>
+    <style>
+        #add_item{
+            color:#ee2c3db8;
+        }
+
+        .delete{
+            color:#04538ac2;
+            font-size:13px;
+        }
+
+        .item{
+            text-decoration:none;
+        }
+    </style>
 </head>
 <body>
 
@@ -14,7 +28,7 @@
             <th>终止</th>
             <th>个数</th>
             <th>
-                <div id="add_item" style="background-color:red">新增</div>
+                <a class = "item" href="#"><div id="add_item" >新增</div></a>
             </th>
         </tr>
         <tr>
@@ -22,7 +36,7 @@
             <td><input class="max_ip" value="0.0.0.0"/></td>
             <td><input class="count" value="1"/></td>
             <td>
-                <p class="delete">删除</p>
+                <a class = "item delete" href="#">删除</a>
             </td>
 
         </tr>
@@ -45,7 +59,7 @@
                 "            <td><input class=\"max_ip\" value=\"0.0.0.0\"/></td>\n" +
                 "            <td><input class=\"count\" value=\"1\"/></td>\n" +
                 "            <td>\n" +
-                "                <p class=\"delete\">删除</p>\n" +
+                "                <a class=\"item delete\" href=\"#\">删除</a>\n" +
                 "            </td>\n" +
                 "\n" +
                 "        </tr>")
